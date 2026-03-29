@@ -38,6 +38,8 @@ The system is built using Python and follows an end-to-end automated workflow.
 
 ## 🧠 Approach
 
+The system is modularized into extractor, analyzer, selector, and generator components, ensuring scalability and maintainability.
+
 ### 1. Content Extraction
 
 The system reads the input PPTX file and extracts:
@@ -47,7 +49,7 @@ The system reads the input PPTX file and extracts:
 * Bullet points
 * Slide structure information
 
-The extracted data is converted into a structured format (JSON-like representation), which is later used for rebuilding the presentation.
+The extracted data is converted into a structured JSON format, which is later used for rebuilding the presentation.
 
 ---
 
@@ -121,19 +123,33 @@ git clone https://github.com/anishchauhan9817/anish_assign5.git
 cd anish_assign5
 ```
 
+---
+
 ### 2. Install dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 3. Run the application
+---
+
+### 3. Run the application (Web)
 
 ```bash
 python app.py
 ```
 
-### 4. Open in browser
+---
+
+### 4. Run pipeline directly (CLI)
+
+```bash
+python3 run_pipeline.py
+```
+
+---
+
+### 5. Open in browser
 
 ```
 http://localhost:5000
@@ -147,10 +163,11 @@ http://localhost:5000
 ├── app.py
 ├── core/
 ├── templates/
-├── static/
+├── templates_ppt/
 ├── output/
 │   └── final_presentation.pptx
 ├── requirements.txt
+├── run_pipeline.py
 └── README.md
 ```
 
@@ -179,12 +196,10 @@ http://localhost:5000
 
 ## 👨‍💻 Author
 
-Anish Chauhan
+**Anish Chauhan**
 
 ---
 
 ## ✅ Conclusion
 
 This project successfully demonstrates an automated pipeline for transforming PPTX presentations using intelligent template selection and structured content extraction.
-
----
