@@ -179,7 +179,7 @@ http://localhost:5000
 
 ## 👨‍💻 Author
 
-Harshit Yadav
+Anish Chauhan
 
 ---
 
