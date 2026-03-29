@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PPT Enhancer</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
+body {
+  font-family: 'Inter', sans-serif;
+  background: radial-gradient(circle at top, #0f172a, #020617);
+  color: #e2e8f0;
+  text-align: center;
+  padding: 40px;
+}
+
+.container {
+  max-width: 720px;
+  margin: auto;
+}
+
+/* Heading */
+h1 {
+  font-size: 36px;
+  font-weight: 700;
+  background: linear-gradient(90deg, #60a5fa, #a78bfa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+p {
+  color: #94a3b8;
+}
+
+/* Glass Card */
+.card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(12px);
+  border-radius: 20px;
+  padding: 24px;
+  margin-top: 24px;
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+  transition: 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+}
+
+/* Drop Zone */
+.drop-zone {
+  border: 2px dashed rgba(255,255,255,0.2);
+  padding: 40px;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.drop-zone:hover {
+  border-color: #60a5fa;
+  background: rgba(96,165,250,0.05);
+}
+
+/* Button */
+button {
+  margin-top: 20px;
+  padding: 14px 28px;
+  border-radius: 12px;
+  border: none;
+  background: linear-gradient(135deg, #6366f1, #ec4899);
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(99,102,241,0.4);
+}
+
+/* Sections */
+.analysis, .result, .error {
+  margin-top: 20px;
+  padding: 20px;
+  border-radius: 16px;
+  text-align: left;
+}
+
+.analysis { background: rgba(99,102,241,0.1); }
+.result { background: rgba(34,197,94,0.1); }
+.error { background: rgba(239,68,68,0.1); }
+
+/* Links */
+.btn-link {
+  display: block;
+  margin-top: 10px;
+  padding: 12px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 10px;
+  text-decoration: none;
+  color: white;
+  transition: 0.3s;
+}
+
+.btn-link:hover {
+  background: rgba(255,255,255,0.15);
+}
+
+/* Loader */
+.loader {
+  border: 4px solid rgba(255,255,255,0.1);
+  border-top: 4px solid #6366f1;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  animation: spin 1s linear infinite;
+  margin: 20px auto;
+  display: none;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Preview Images */
+.preview-img {
+  width: 100%;
+  border-radius: 10px;
+  margin-top: 10px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <h1>PPT Enhancer 🚀</h1>
+  <p>Upload your PPT and get smart suggestions + redesign tools</p>
+
+  <!-- Upload Card -->
+  <div class="card">
+    <div class="drop-zone" onclick="fileInput.click()">
+      <p>📂 Drag & Drop or Click to Upload PPT</p>
+      <input type="file" id="fileInput" accept=".pptx" hidden>
+    </div>
+
+    <button onclick="startEnhance()">✨ Analyse PPT</button>
+    <div class="loader" id="loader"></div>
+  </div>
+
+  <!-- Error -->
+  <div id="errorBox" class="error" style="display:none;"></div>
+
+  <!-- Analysis -->
+  <div id="analysisBox" class="analysis" style="display:none;"></div>
+
+  <!-- Result -->
+  <div id="resultBox" class="result" style="display:none;"></div>
+</div>
+
+<script>
+const fileInput = document.getElementById('fileInput');
+
+// Drag & Drop
+const dropZone = document.querySelector('.drop-zone');
+
+dropZone.addEventListener('dragover', e => {
+  e.preventDefault();
+  dropZone.style.borderColor = '#60a5fa';
+});
+
+dropZone.addEventListener('dragleave', () => {
+  dropZone.style.borderColor = 'rgba(255,255,255,0.2)';
+});
+
+dropZone.addEventListener('drop', e => {
+  e.preventDefault();
+  fileInput.files = e.dataTransfer.files;
+});
+
+// ERROR
+function showError(msg) {
+  const box = document.getElementById('errorBox');
+  box.innerText = msg;
+  box.style.display = 'block';
+}
+
+// MAIN FUNCTION
+async function startEnhance() {
+  const file = fileInput.files[0];
+
+  document.getElementById('errorBox').style.display = 'none';
+  document.getElementById('analysisBox').style.display = 'none';
+  document.getElementById('resultBox').style.display = 'none';
+
+  if (!file) {
+    showError("Please upload a PPT file");
+    return;
+  }
+
+  document.getElementById('loader').style.display = 'block';
+
+  const formData = new FormData();
+  formData.append("pptx_file", file);
+
+  try {
+    const res = await fetch("/enhance", {
+      method: "POST",
+      body: formData
+    });
+
+    const data = await res.json();
+
+    document.getElementById('loader').style.display = 'none';
+
+    if (!data.success) {
+      showError(data.error);
+      return;
+    }
+
+    // ANALYSIS TEXT
+    document.getElementById('analysisBox').innerHTML =
+      "<h3>📊 PPT Analysis</h3><pre>" + data.analysis + "</pre>";
+
+    document.getElementById('analysisBox').style.display = 'block';
+
+    // LINKS
+    let linksHTML = "<h3>🚀 Improve your PPT:</h3>";
+
+    data.links.forEach(link => {
+      linksHTML += `
+        <a class="btn-link" href="${link.url}" target="_blank">
+          ${link.name}
+        </a>
+      `;
+    });
+
+    document.getElementById('resultBox').innerHTML = linksHTML;
+    document.getElementById('resultBox').style.display = 'block';
+
+  } catch (err) {
+    document.getElementById('loader').style.display = 'none';
+    showError("Error: " + err.message);
+  }
+}
+</script>
+
+</body>
+</html>
