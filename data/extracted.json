@@ -1,0 +1,69 @@
+[
+    {
+        "title": "",
+        "content": [
+            "Glossaries",
+            "Presented\tby:\tTraining\tDepartment"
+        ],
+        "layout": "Blank"
+    },
+    {
+        "title": "Glossary",
+        "content": [
+            ""
+        ],
+        "layout": "Title and Content"
+    },
+    {
+        "title": "Glossary",
+        "content": [
+            ""
+        ],
+        "layout": "Title and Content"
+    },
+    {
+        "title": "Definitions / Terminology",
+        "content": [
+            "",
+            "Repayment\u00a0Day\u00a0Branch -   If the total no. of scheduled Centre meetings are greater than 10, then branch will be considered as Repayment Day Branch.\n\nRepayment Day Branch - If the total no. of scheduled Centre meetings are less than or equals to 10, then Branch will be considered as Non- Repayment Day Branch.\n\nRepayment CO - If the total no. of scheduled Centre meetings are greater than 2, then that CO will be considered as Repayment CO\n\nNon Repayment CO -  If the total no. of scheduled Centre meetings are Less than 2, then that CO will be considered as Non Repayment CO",
+            ""
+        ],
+        "layout": "Title and Content"
+    },
+    {
+        "title": "Definitions / Terminology",
+        "content": [
+            "",
+            "Matured Arrear Clients-  Clients whose loan tenure has been completed but are in arrears are called as Matured Arrear Clients.\n\nMatured Arrear Centers - A Centre in which 100% clients exists in known as Matured Arrear Center.\n\nOperational Branch -  Branches where disbursement of all products is allowed is known as operational branch.\n\nNon Operational Branch -  Branches where disbursement of new clients at new centre is suspended due to spikes in the arrear but lending at graduated center is allowed. \n\n\n\n\ns.",
+            ""
+        ],
+        "layout": "Title and Content"
+    },
+    {
+        "title": "Terminology",
+        "content": [
+            "",
+            ""
+        ],
+        "layout": "Title and Content"
+    },
+    {
+        "title": "Terminology",
+        "content": [
+            ""
+        ],
+        "layout": "Title and Content"
+    },
+    {
+        "title": "Other Glossary",
+        "content": [
+            ""
+        ],
+        "layout": "Title and Content"
+    },
+    {
+        "title": "Thank You",
+        "content": [],
+        "layout": "Title Only"
+    }
+]
