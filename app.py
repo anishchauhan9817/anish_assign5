@@ -12,7 +12,6 @@ app = Flask(__name__)
 UPLOAD_DIR = Path("uploads")
 UPLOAD_DIR.mkdir(exist_ok=True)
 
-# Limit file size (optional but recommended: 10MB)
 app.config['MAX_CONTENT_LENGTH'] = 10 * 1024 * 1024
 
 # =========================
@@ -30,22 +29,17 @@ def enhance():
     try:
         file = request.files.get("pptx_file")
 
-        # ❌ Validation
         if not file:
             return jsonify({"success": False, "error": "No file uploaded"}), 400
 
         if not file.filename.lower().endswith(".pptx"):
             return jsonify({"success": False, "error": "Upload only .pptx file"}), 400
 
-        # =========================
         # SAVE FILE
-        # =========================
         file_path = UPLOAD_DIR / f"{uuid.uuid4().hex}.pptx"
         file.save(file_path)
 
-        # =========================
         # EXTRACT TEXT
-        # =========================
         try:
             md = MarkItDown()
             result = md.convert(str(file_path))
@@ -57,33 +51,62 @@ def enhance():
             return jsonify({"success": False, "error": "No content found in PPT"}), 400
 
         # =========================
-        # ANALYSIS
+        # SMART ANALYSIS
         # =========================
         slides = ppt_text.split("\n\n")
         slide_count = len(slides)
         text_length = len(ppt_text)
 
+        avg_words = text_length // slide_count if slide_count else 0
+
+        suggestions = []
+
+        if slide_count > 50:
+            suggestions.append("Too many slides, consider reducing")
+
+        if text_length > 5000:
+            suggestions.append("Content is too dense, simplify text")
+
+        if avg_words > 100:
+            suggestions.append("Too much text per slide")
+
+        if slide_count < 10:
+            suggestions.append("Add more content slides")
+
+        if not suggestions:
+            suggestions = [
+                "Good structure overall",
+                "Consider adding visuals/icons",
+                "Improve slide headings"
+            ]
+
+        # SCORE SYSTEM
+        score = 100
+
+        if slide_count > 50:
+            score -= 20
+
+        if text_length > 5000:
+            score -= 20
+
+        if avg_words > 100:
+            score -= 20
+
+        # ANALYSIS TEXT
         analysis = f"""
 📊 PPT ANALYSIS
 
 • Estimated Slides: {slide_count}
 • Content Length: {text_length} characters
+• Avg Words/Slide: {avg_words}
 
-💡 Suggestions:
-- Reduce text
-- Add visuals/icons
-- Keep 1 idea per slide
-- Use better headings
+⭐ Score: {score}/100
 """
 
-        # =========================
         # PREVIEW
-        # =========================
         preview_text = "\n\n".join(slides[:3])
 
-        # =========================
-        # REDIRECT LINKS
-        # =========================
+        # LINKS
         links = [
             {"name": "🎨 Canva (Best Design)", "url": "https://www.canva.com/templates/presentations/"},
             {"name": "📊 Slidesgo Templates", "url": "https://slidesgo.com/"},
@@ -94,6 +117,8 @@ def enhance():
         return jsonify({
             "success": True,
             "analysis": analysis.strip(),
+            "suggestions": suggestions,
+            "score": score,
             "preview": preview_text.strip(),
             "links": links
         })
@@ -103,7 +128,7 @@ def enhance():
 
 
 # =========================
-# RUN APP (RENDER READY)
+# RUN APP
 # =========================
 if __name__ == "__main__":
     print("\n🚀 PPT Enhancer running...\n")

@@ -1,0 +1,16 @@
+# Python cache
+__pycache__/
+*.pyc
+
+# Mac system files
+.DS_Store
+
+# Uploads & generated files
+uploads/
+output/
+
+# Environment files (optional)
+.env
+
+# VS Code settings (optional)
+.vscode/
